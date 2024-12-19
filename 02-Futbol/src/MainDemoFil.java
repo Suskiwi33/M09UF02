@@ -3,7 +3,6 @@ public class MainDemoFil {
         
         Thread filActual = Thread.currentThread();
 
-        
         System.out.println("MainDemoFil.main:");
         System.out.println("Prioritat -> " + filActual.getPriority());
         System.out.println("Nom -> " + filActual.getName());
