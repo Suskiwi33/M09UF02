@@ -1,37 +1,65 @@
-import java.util.Random;
+import java.util.Scanner;
 
-public class Coet extends Thread{
+public class Coet {
+    private final Motor[] motors = new Motor[4];
 
-    private final static Motor[] motors = new Motor[4];
-
-    public  Coet() {
+    public Coet() {
         for (int i = 0; i < motors.length; i++) {
             motors[i] = new Motor(i);
         }
     }
 
-    public static void passaAPotencia(int p){
-        if(p<=0 || p>=10){
+    public void passaAPotencia(int p) {
+        if (p >= 0 && p <= 10) {
+            System.out.println("Passant a potència " + p);
             for (Motor motor : motors) {
                 motor.setPotencia(p);
             }
-        }else{
-            System.out.println("Error, potencia no vàlida");
+        } else {
+            System.out.println("Error, potència no vàlida.");
         }
     }
 
-    public static void arranca(){
-        
+    public void arranca() {
+        for (Motor motor : motors) {
+            motor.start();
+        }
     }
 
     public static void main(String[] args) {
         System.out.println("Potencia inicial?");
-        String pot = Entrada.readLine();
-        try{
-            passaAPotencia(Integer.parseInt(pot));
-            arranca();
-        }catch(Exception e){
-            System.out.println("La potencia ha de ser un numero enter");
+        Scanner scanner = new Scanner(System.in);
+
+        int potenciaInicial;
+        try {
+            potenciaInicial = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Entrada no vàlida. Introdueix un número enter.");
+            scanner.close();
+            return;
         }
+
+        Coet coet = new Coet();
+        coet.passaAPotencia(potenciaInicial);
+        coet.arranca();
+       
+
+        while (true) {
+            
+            int pot;
+            try {
+                pot = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Entrada no vàlida. Introdueix un número enter.");
+                scanner.next();
+                continue;
+            }
+            coet.passaAPotencia(pot);
+            if(pot==0){break;}
+        }
+
+        
+        scanner.close();
     }
 }
+
