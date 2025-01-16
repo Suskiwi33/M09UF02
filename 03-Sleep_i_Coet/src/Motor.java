@@ -33,15 +33,15 @@ public class Motor extends Thread{
         Random random = new Random();
         try {
             while (true) {
-                synchronized (this) {
-                    while (actual == objectiu) {
-                        if (objectiu == 0) {
-                            System.out.println("Motor " + id + ": Apagat. Objectiu: 0");
-                            return;
-                        }
-                        wait();
+                
+                while (actual == objectiu) {
+                    if (objectiu == 0) {
+                        System.out.println("Motor " + id + ": Apagat. Objectiu: 0");
+                        return;
                     }
+                    Thread.sleep(100);
                 }
+                
 
                 
                 if (actual < objectiu) {
