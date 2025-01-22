@@ -44,8 +44,9 @@ public class Treballador extends Thread{
                         Thread.sleep(rnd.nextInt(100));
                         pagaImpostos();
                         Thread.sleep(rnd.nextInt(100));
-                        edat_actual++;
+                        
                     }
+                    edat_actual++;
                 } catch (InterruptedException e) {
                     System.err.println("El fil ha sigut interrumput: " + e.getMessage());
                     break;
