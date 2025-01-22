@@ -18,11 +18,12 @@ public class Treballador extends Thread{
     }
 
     public void cobra() {
-        cobrat = cobrat + (sou_anual_brut / 12);
+        cobrat +=(sou_anual_brut / 12.0f);
     }
 
     public void pagaImpostos() {
-        cobrat = cobrat - (cobrat * 24 / 100);
+        float impostos = (sou_anual_brut /12.0f) * 0.24f;
+        cobrat -= impostos;
     }
 
     public int gettrId(){return this.trId;}
