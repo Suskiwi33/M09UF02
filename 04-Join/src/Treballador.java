@@ -38,12 +38,13 @@ public class Treballador extends Thread{
 
             while(edat_actual < edat_fi_treball){
                 try {
-                    cobra();
-                    Thread.sleep(rnd.nextInt(100));
-                    pagaImpostos();
-                    Thread.sleep(rnd.nextInt(100));
-                    edat_actual++;
-
+                    for(int i = 0; i<12; i++){
+                        cobra();
+                        Thread.sleep(rnd.nextInt(100));
+                        pagaImpostos();
+                        Thread.sleep(rnd.nextInt(100));
+                        edat_actual++;
+                    }
                 } catch (InterruptedException e) {
                     System.err.println("El fil ha sigut interrumput: " + e.getMessage());
                     break;
