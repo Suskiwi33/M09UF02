@@ -11,22 +11,29 @@ public class Soci extends Thread{
 
     public Compte getCompte(){return this.compte;}
 
-    private void agregaSaldo(){
+     private void agregaSaldo(){
         compte.setSaldo(compte.getSaldo()+aportacio);
     }
-    private void treuSaldo(){
+     private void treuSaldo(){
         compte.setSaldo(compte.getSaldo()-aportacio);
     }
 
     @Override
     public void run() {
+        
         for(int i = 0; i<maxAnys; i++){
 
             for(int y = 1; y<=12;y++){
                 if(y%2==0){
-                    agregaSaldo();
+                    compte.agregar(aportacio);;
                 }else{
-                    treuSaldo();
+                    compte.treure(aportacio);
+                }
+                
+                try {
+                    Thread.sleep(random.nextInt(esperaMax));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }

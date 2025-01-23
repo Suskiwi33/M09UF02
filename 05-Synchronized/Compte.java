@@ -15,13 +15,19 @@ public class Compte {
         return instancia;
     }
 
-    public double getSaldo() {
+    public synchronized double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public synchronized void setSaldo(double saldo) {
     
         this.saldo = saldo;
         
+    }
+    public synchronized void agregar(double cant){
+        saldo += cant;
+    }
+    public synchronized void treure(double cant){
+        saldo -= cant;
     }
 }

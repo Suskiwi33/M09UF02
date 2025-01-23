@@ -1,11 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Associacio {
     
     private int numSocis = 1000;
     private Soci[] socis = new Soci[numSocis];
-    private List<Thread> fils = new ArrayList<>();
 
     public Associacio() {
         for (int i = 0; i < socis.length; i++) {
@@ -15,14 +11,12 @@ public class Associacio {
 
     public void iniciaCompteTempsSocis(){
         for (Soci soci : socis) {
-            Thread fil = new Thread(soci);
-            fils.add(fil);
-            fil.start();
+            soci.start();
         }
     }
 
     public void esperaPeriodeSocis(){
-        for (Thread fil : fils) {
+        for (Thread fil : socis) {
             try {
                 fil.join();
             } catch (InterruptedException e) {
