@@ -11,10 +11,10 @@ public class Soci extends Thread{
 
     public Compte getCompte(){return this.compte;}
 
-     private void agregaSaldo(){
+    private void agregaSaldo(){
         compte.setSaldo(compte.getSaldo()+aportacio);
     }
-     private void treuSaldo(){
+    private void treuSaldo(){
         compte.setSaldo(compte.getSaldo()-aportacio);
     }
 
