@@ -14,15 +14,36 @@ public class Filosof extends Thread {
     }
 
 
-    public void menjar(){
-        try {
-            int temps = 1000 + rnd.nextInt(1000);
-            Thread.sleep(temps);
-        } catch (InterruptedException e) {
-            
-            e.printStackTrace();
+    public void menjar() throws InterruptedException{
+        while(true){
+
+            if(!esquerra.getUs()){
+                esquerra.setUs(true);
+                System.out.println(nom + " agafa la forquilla esquerra "+ esquerra.getNum());
+                if(!dreta.getUs()){
+                    
+                    dreta.setUs(true);
+                    System.out.println(nom + " agafa forquilla dreta "+ dreta.getNum());
+                    System.out.println(nom + " menja.");
+                    Thread.sleep(rnd.nextInt(2000-1000));
+                    gana = 0;
+                    esquerra.setUs(false);
+                    dreta.setUs(false);
+                    System.out.println(nom + " Ha acabat de menjar.");
+                    break;
+
+                }else{
+                    esquerra.setUs(false);
+                    System.out.println(nom + " deixa forquilla esquerra("+ esquerra.getNum() + ") i espera (dreta ocupada).");
+                    gana ++;
+                    System.out.println(nom + " Gana: " + gana);
+                }
+            }else{
+                gana++;
+                System.out.println(nom + " Gana: " + gana);
+            }
+            Thread.sleep(rnd.nextInt(1000-500));
         }
-        System.out.println(nom + " menja.");
     }
 
 
@@ -41,11 +62,14 @@ public class Filosof extends Thread {
     
     @Override
     public void run() {
+
+        rnd = new Random();
         while(true){
 
             try{
 
-                
+                menjar();
+                pensar();
 
 
             } catch (InterruptedException e) {

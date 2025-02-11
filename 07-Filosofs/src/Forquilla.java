@@ -9,5 +9,6 @@ public class Forquilla{
 
     public void setUs (boolean us){this.enUs = us;}
     public boolean getUs(){return enUs;}
+    public int getNum(){return this.num;}
 
 }
