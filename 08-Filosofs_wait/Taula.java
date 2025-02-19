@@ -3,38 +3,40 @@ import java.util.List;
 
 public class Taula {
     
-    private List <Filosof> filosofs;
-    private List <Forquilla> forquilles;
+    private Filosof[] comencals;
+    private Forquilla[] forquilles;
 
     public Taula(int numFilo){
-        forquilles = new ArrayList<>();
+        forquilles = new Forquilla[numFilo];
         for (int i = 0; i < numFilo; i++) {
-            forquilles.add(new Forquilla(i));
+           forquilles[i] = new Forquilla(i);
         }
 
-        filosofs = new ArrayList<>();
+        comencals = new Filosof[numFilo];
         for (int i = 0; i < numFilo; i++) {
-            Forquilla esquerra = forquilles.get(i);
-            Forquilla dreta = forquilles.get((i + 1) % numFilo);
-            filosofs.add(new Filosof("Filosof " + i, esquerra, dreta, i));
+            Forquilla esquerra = forquilles[i];
+            Forquilla dreta = forquilles[(i+1)% numFilo];
+            comencals[i]= new Filosof("Filosof " + i, esquerra, dreta, i);
+            
         }
     }
 
     public void showTaula() {
-        for (Filosof filosof : filosofs) {
+        for (Filosof filosof : comencals) {
             System.out.println(filosof);
         }
     }
 
-    public void cridaraTaula() {
-        for (Filosof filosof : filosofs) {
-            new Thread(filosof).start();
+    public void cridarTaula() {
+        for (Filosof filosof : comencals) {
+            filosof.start();
         }
     }
 
+    
     public static void main(String[] args) {
         Taula taula = new Taula(4);
         taula.showTaula();
-        taula.cridaraTaula();
+        taula.cridarTaula();
     }
 }

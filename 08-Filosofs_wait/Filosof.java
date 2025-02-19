@@ -8,108 +8,100 @@ public class Filosof extends Thread {
     private String nom;
     private Random rnd;
 
-    public Filosof(String nom, Forquilla esquerra2, Forquilla dreta2, int numComencal){
+    public Filosof(String nom, Forquilla esquerra2, Forquilla dreta2, int numComencal) {
         this.nom = nom;
         this.esquerra = esquerra2;
         this.dreta = dreta2;
         this.numComencal = numComencal;
+        this.rnd = new Random(); 
     }
 
-    public void agafarForquilles() throws InterruptedException{
-        agafarForquillaEsquerra();
-        agafarForquillaDreta();
-    }
-
-    public void agafarForquillaEsquerra() throws InterruptedException {
-        if(esquerra.getNumPropietari() == -1){
-            esquerra.setNumPropietari(numComencal);
-            System.out.println(nom + " agafa forquilla esquerra "+ esquerra.getNum());
-        }else{
-            esquerra.wait();
-        }
-    }
-
-    public void agafarForquillaDreta() throws InterruptedException{
-
-        if(esquerra.getNumPropietari()== numComencal){
-
-            if(dreta.getNumPropietari() == -1){
-                dreta.setNumPropietari(numComencal);
-                System.out.println(nom + " agafa forquilla dreta "+ dreta.getNum());
-            }else{
-                deixarForquilles();
-                System.out.println(nom + " deixa forquilla esquerra("+ esquerra.getNum() + ") i espera (dreta ocupada).");
-                gana ++;
-                System.out.println(nom + " Gana: " + gana);
-                dreta.wait();
+    public boolean agafarForquilles() throws InterruptedException {
+        synchronized(this){
+            while(!agafaForquillaEsquerra()){
+                wait();
             }
-        }else{
-            dreta.wait();
+        }
+        if(agafarForquillaDreta()){
+            return true;
         }
 
-        
-    }
-
-    
-
-    public void deixarForquilles(){
-        dreta.setForquillaLliure();
+        System.out.println(nom + " deixa forquilla esquerra("+ esquerra.getNum() + ") i espera (dreta ocupada)");
         esquerra.setForquillaLliure();
-        dreta.notifyAll();
-        esquerra.notifyAll();
+        return false;
+
     }
 
+    public boolean agafaForquillaEsquerra(){
+        synchronized(esquerra){
+            if(esquerra.getNumPropietari()==-1){
+                esquerra.setNumPropietari(numComencal);
+                System.out.println(nom + " agafa forquilla esquerra " + esquerra.getNum());
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean agafarForquillaDreta(){
+        synchronized(dreta){
+            if(dreta.getNumPropietari()==-1){
+                dreta.setNumPropietari(numComencal);
+                System.out.println(nom + " agafa forquilla dreta " + dreta.getNum());
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public void menjar() throws InterruptedException{
-        while(true){
+    public void deixarForquilles() {
+        
+        synchronized(esquerra){
+            esquerra.setForquillaLliure();
+        }
+        synchronized(dreta){
+            dreta.setForquillaLliure();
+        }
+        System.out.println(nom + " deixa les forquilles.");
+    }
 
-            agafarForquilles();
-            if(dreta.getNumPropietari() != -1 && esquerra.getNumPropietari() != -1){
+    public void menjar() throws InterruptedException {
+        while (true) {
+            if(agafarForquilles()){
+            
                 System.out.println(nom + " menja.");
-                Thread.sleep(rnd.nextInt(2000-1000));
+                Thread.sleep(rnd.nextInt(2000 - 1000));
                 gana = 0;
                 deixarForquilles();
-                System.out.println(nom + " Ha acabat de menjar.");
+                System.out.println(nom + " ha acabat de menjar.");
                 break;
+                
             }else{
-                gana++;
+                deixarForquilles();
+                gana ++;
                 System.out.println(nom + " Gana: " + gana);
-            }
-            Thread.sleep(rnd.nextInt(1000-500));
 
+            }
+            
+            
         }
     }
 
-
-    public void pensar(){
-        try {
-            int temps = 1000 + rnd.nextInt(1000);
-            Thread.sleep(temps);
-        } catch (InterruptedException e) {
-            
-            e.printStackTrace();
-        }
+    public void pensar() throws InterruptedException {
+        int temps = 1000 + rnd.nextInt(1000);
+        Thread.sleep(temps);
         System.out.println(nom + " pensa.");
     }
 
-
-    
     @Override
     public void run() {
-
-        rnd = new Random();
-        while(true){
-
-            try{
-
+        while (true) {
+            try {
                 menjar();
                 pensar();
-
-
             } catch (InterruptedException e) {
                 System.out.println(nom + " ha sigut interrumput.");
-                break;
-            }
+            } 
         }
     }
 }
+

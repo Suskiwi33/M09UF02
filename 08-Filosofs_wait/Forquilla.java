@@ -6,7 +6,7 @@ public class Forquilla{
 
     public Forquilla(int num){
         this.num = num;
-        
+        setNumPropietari(LLIURE);
     }
 
     public void setNum(int num){this.num = num;}
@@ -15,5 +15,8 @@ public class Forquilla{
     public void setNumPropietari(int numProp){this.numPropietari = numProp;}
     public int getNumPropietari(){return this.numPropietari;}
 
-    public void setForquillaLliure(){this.numPropietari = LLIURE;}
+    synchronized public void setForquillaLliure(){
+        this.numPropietari = LLIURE;
+        notifyAll();
+    }
 }
