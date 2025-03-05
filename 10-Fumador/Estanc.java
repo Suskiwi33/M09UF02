@@ -9,20 +9,44 @@ public class Estanc extends Thread{
     Random rnd;
 
     public Estanc (){
+        this.tabacs = new ArrayList<>();
+        this.papers = new ArrayList<>();
+        this.llumins = new ArrayList<>();
         this.flag=true;
         this.rnd = new Random();
     }
 
     public void nouSubministrament (){
         int aleatori = rnd.nextInt(3);
-        if(aleatori==0){addTabac();}
-        if(aleatori==1){addPaper();}
-        if(aleatori==2){addLlumi();}
+        if(aleatori==0){addTabac(new Tabac());}
+        if(aleatori==1){addPaper(new Paper());}
+        if(aleatori==2){addLlumi(new Llumi());}
     }
 
-    public void addTabac(){tabacs.add(new Tabac());}
-    public void addPaper(){papers.add(new Paper());}
-    public void addLlumi(){llumins.add(new Llumi());}
+    public void addTabac(Tabac tabac){
+        System.out.println("Afegint tabac");
+
+        tabacs.add(tabac);
+        synchronized (this) {
+            notifyAll();
+        }
+    }
+    public void addPaper(Paper paper){
+        System.out.println("Afegint paper");
+
+        papers.add(paper);
+        synchronized (this) {
+            notifyAll();
+        }
+    }
+    public void addLlumi(Llumi llumi){
+        System.out.println("Afegint llumi");
+        
+        llumins.add(llumi);
+        synchronized (this) {
+            notifyAll();
+        }
+    }
 
     public Tabac venTabac(){
         if(tabacs.size()>0){
@@ -51,6 +75,8 @@ public class Estanc extends Thread{
     @Override
     public void run(){
 
+        System.out.println("Estanc obert");
+
         while(flag){
             nouSubministrament();
             int temps = 500 + rnd.nextInt(1000);
@@ -63,7 +89,7 @@ public class Estanc extends Thread{
             
 
         }
-
+        System.out.println("Estanc tancat");
     }
 
 }
